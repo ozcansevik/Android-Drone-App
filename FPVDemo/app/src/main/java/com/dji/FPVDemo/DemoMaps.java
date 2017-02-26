@@ -57,6 +57,7 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
 
     private Button locate, add, clear;
     private Button config, prepare, start, stop, atterrir;
+    private TextView textDistance;
 
     private boolean isAdd = false;
 
@@ -118,6 +119,7 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
         prepare = (Button) findViewById(R.id.prepare);
         start = (Button) findViewById(R.id.start);
         stop = (Button) findViewById(R.id.stop);
+        textDistance = (TextView) findViewById(R.id.textDistance);
 
        // atterrir = (Button) findViewById(R.id.atterir);
 
@@ -263,14 +265,17 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
             setResultToToast("Cannot add waypoint");
         } */
 
-
+        DJIWaypoint.DJIWaypointAction action = new DJIWaypoint.DJIWaypointAction(DJIWaypoint.DJIWaypointActionType.StartTakePhoto,1);
         markWaypoint(point);
         DJIWaypoint mWaypoint = new DJIWaypoint(point.latitude, point.longitude, altitude);
+        mWaypoint.addAction(action);
         //Add waypoints to Waypoint arraylist;
         if (mWaypointMission != null) {
             mWaypointMission.addWaypoint(mWaypoint);
             setResultToToast("AddWaypoint");
         }
+
+        textDistance.setText(mWaypointMission.);
 
     }
 
@@ -310,7 +315,11 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(point);
         markerOptions.title("Title");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+        if(mMarkers.isEmpty())
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.start));
+        else
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+
         Marker marker = gMap.addMarker(markerOptions);
         mMarkers.put(mMarkers.size(), marker);
     }
@@ -560,27 +569,4 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
         });
     }
 
-    /*
-    private void captureAction(){
-
-        DJICameraSettingsDef.CameraMode cameraMode = DJICameraSettingsDef.CameraMode.ShootPhoto;
-
-        final DJICamera camera = SdkConnection.getCameraInstance();
-        if (camera != null) {
-
-            DJICameraSettingsDef.CameraShootPhotoMode photoMode = DJICameraSettingsDef.CameraShootPhotoMode.Single; // Set the camera capture mode as Single mode
-            camera.startShootPhoto(photoMode, new DJICommonCallbacks.DJICompletionCallback() {
-
-                @Override
-                public void onResult(DJIError error) {
-                    if (error == null) {
-                        showToast("take photo: success");
-                    } else {
-                        showToast(error.getDescription());
-                    }
-                }
-
-            }); // Execute the startShootPhoto API
-        }
-    }*/
 }
