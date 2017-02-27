@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -36,7 +37,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import dji.common.camera.DJICameraSettingsDef;
 import dji.common.error.DJIError;
+import dji.common.flightcontroller.DJIAircraftRemainingBatteryState;
 import dji.common.flightcontroller.DJIFlightControllerCurrentState;
+import dji.common.flightcontroller.DJIFlightControllerDataType;
+import dji.common.flightcontroller.DJIFlightControllerSmartGoHomeStatus;
 import dji.common.util.DJICommonCallbacks;
 import dji.sdk.base.DJIBaseProduct;
 import dji.sdk.camera.DJICamera;
@@ -65,7 +69,7 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
     private final Map<Integer, Marker> mMarkers = new ConcurrentHashMap<Integer, Marker>();
     private Marker droneMarker = null;
 
-    private float altitude = 100.0f;
+    private float altitude = 20.0f;
     private float mSpeed = 10.0f;
 
     private DJIWaypointMission mWaypointMission;
@@ -275,8 +279,36 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
             setResultToToast("AddWaypoint");
         }
 
-        textDistance.setText(mWaypointMission.);
 
+    }
+
+    public String calculDistance(){
+
+        String dist = "";
+        float distance=0;
+        Location l1 = new Location("One");
+        Location l2 = new Location("Two");
+
+        for(int i=1;i<mMarkers.size();i++) {
+            LatLng point1 = new LatLng(mMarkers.get(i-1).getPosition().latitude, mMarkers.get(i-1).getPosition().longitude);
+            LatLng point2 = new LatLng(mMarkers.get(i).getPosition().latitude, mMarkers.get(i).getPosition().longitude);
+
+            l1.setLatitude(point1.latitude);
+            l1.setLongitude(point1.longitude);
+
+            l2.setLatitude(point2.latitude);
+            l2.setLongitude(point2.longitude);
+
+            distance = distance + l1.distanceTo(l2);
+
+        }
+        dist = distance + " M";
+
+        if (distance > 1000.0f) {
+            distance = distance / 1000.0f;
+            dist = distance + " KM";
+        }
+        return dist;
     }
 
 
@@ -305,7 +337,9 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
                 }
             }
         });
-       // cameraUpdate();
+        float zoomlevel = (float) 18.0;
+       // gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(pos.latitude, pos.longitude), zoomlevel));
+
     }
 
 
@@ -502,6 +536,7 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
 
     private void prepareWayPointMission(){
         if (mMissionManager != null && mWaypointMission != null) {
+            textDistance.setText(calculDistance());
             DJIMission.DJIMissionProgressHandler progressHandler = new DJIMission.DJIMissionProgressHandler() {
                 @Override
                 public void onProgress(DJIMission.DJIProgressType type, float progress) {
@@ -559,7 +594,6 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
 
     }
 
-    // Method for taking photo
 
     public void showToast(final String msg) {
         runOnUiThread(new Runnable() {
