@@ -82,14 +82,14 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
     private List<LatLng> listLatLng = new ArrayList<>();
 
     private float altitude = 20.0f;
-    private float mSpeed = 10.0f;
+    private float mSpeed = 5.0f;
 
     private DJIWaypointMission mWaypointMission;
     private DJIMissionManager mMissionManager;
     private DJIFlightController mFlightController;
 
-    private DJIWaypointMission.DJIWaypointMissionFinishedAction mFinishedAction;
-    private DJIWaypointMission.DJIWaypointMissionHeadingMode mHeadingMode ;
+    private DJIWaypointMission.DJIWaypointMissionFinishedAction mFinishedAction = DJIWaypointMission.DJIWaypointMissionFinishedAction.GoHome;;
+    private DJIWaypointMission.DJIWaypointMissionHeadingMode mHeadingMode = DJIWaypointMission.DJIWaypointMissionHeadingMode.Auto ;
 
     final public int MSG_FLIGHT_CONTROLLER_CURRENT_STATE = 1;
     final public int MSG_FLIGHT_CONTROLLER_CURRENT_STATE_ERROR = 2;
@@ -187,10 +187,6 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        mFinishedAction = DJIWaypointMission.DJIWaypointMissionFinishedAction.GoHome;
-        mHeadingMode = DJIWaypointMission.DJIWaypointMissionHeadingMode.Auto;
-
 
     }
 
@@ -703,6 +699,15 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
                 }
             });
 
+            for(int i=1;i<mMarkers.size();i++) {
+                LatLng point1 = new LatLng(mMarkers.get(i-1).getPosition().latitude, mMarkers.get(i-1).getPosition().longitude);
+                LatLng point2 = new LatLng(mMarkers.get(i).getPosition().latitude, mMarkers.get(i).getPosition().longitude);
+                gMap.addPolyline(new PolylineOptions()
+                        .add(point1, point2)
+                        .width(5)
+                        .color(Color.RED));
+            }
+
             textValeurDistance.setText(calculDistance());
             runFlightControllerCurrentState();
         }
@@ -713,14 +718,7 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
        /* for (Map.Entry<Integer, Marker> entry : mMarkers.entrySet())
             listLatLng.add(entry.getValue().getPosition());*/
 
-        for(int i=1;i<mMarkers.size();i++) {
-            LatLng point1 = new LatLng(mMarkers.get(i-1).getPosition().latitude, mMarkers.get(i-1).getPosition().longitude);
-            LatLng point2 = new LatLng(mMarkers.get(i).getPosition().latitude, mMarkers.get(i).getPosition().longitude);
-            gMap.addPolyline(new PolylineOptions()
-                    .add(point1, point2)
-                    .width(5)
-                    .color(Color.RED));
-        }
+
         if (mMissionManager != null) {
                 mMissionManager.startMissionExecution(new DJICommonCallbacks.DJICompletionCallback() {
                     @Override
