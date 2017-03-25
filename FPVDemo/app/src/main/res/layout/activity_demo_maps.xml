@@ -16,8 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:text="Config"
-            android:layout_weight="0.9"/>
+            android:text="@string/button_config"/>
 
 
         <TextView
@@ -25,7 +24,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="106dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="10dp"
             android:text="Distance:" />
 
 
@@ -48,30 +48,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:text="Préparer"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:text="@string/button_prepare" />
 
         <TextView
             android:id="@+id/textDistanceMax"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="100dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="10dp"
             android:text="Distance max:" />
 
         <TextView
             android:id="@+id/textValeurDistanceMax"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center" />
 
     </LinearLayout>
 
     <fragment
         android:id="@+id/map"
+        class="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        class="com.google.android.gms.maps.SupportMapFragment" />
+        android:layout_height="350dp" />
 
     <LinearLayout
         android:layout_marginTop="20dp"
@@ -85,7 +86,7 @@
             android:id="@+id/textGPS"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Position GPS actuelle: " />
+            android:text="@string/text_gps" />
 
         <TextView
             android:id="@+id/textValeurGPS"
@@ -106,22 +107,16 @@
             android:id="@+id/start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Demarrer"
+            android:text="@string/button_start"
             android:layout_weight="1"/>
 
         <Button
             android:id="@+id/stop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Arreter"
+            android:text="@string/button_goHome"
             android:layout_weight="1"/>
 
-        <Button
-            android:id="@+id/save"
-            android:text="Sauvegarder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
 
     </LinearLayout>
 

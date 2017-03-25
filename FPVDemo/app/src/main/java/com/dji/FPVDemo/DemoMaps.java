@@ -29,6 +29,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -40,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 import dji.common.camera.DJICameraSettingsDef;
@@ -73,6 +76,7 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
     private Button config, prepare, start, stop, atterrir;
     private TextView textValeurDistance;
     private TextView textValeurDistanceMax;
+    private Circle circle;
 
     private boolean isAdd = false;
 
@@ -140,7 +144,9 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
         config = (Button) findViewById(R.id.config);
         prepare = (Button) findViewById(R.id.prepare);
         start = (Button) findViewById(R.id.start);
+        start.setEnabled(false);
         stop = (Button) findViewById(R.id.stop);
+        stop.setEnabled(false);
         textValeurDistance = (TextView) findViewById(R.id.textValeurDistance);
         textValeurDistanceMax = (TextView) findViewById(R.id.textValeurDistanceMax);
 
@@ -153,6 +159,7 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
         prepare.setOnClickListener(this);
         start.setOnClickListener(this);
         stop.setOnClickListener(this);
+
 
     }
 
@@ -264,37 +271,24 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
                //     Integer intSmartGoHomeStatus_TimeNeededToGoHome = bundle.getInt("SmartGoHomeStatus_TimeNeededToGoHome");
              //       Integer intSmartGoHomeStatus_TimeNeededToLandFromCurrentHeight = bundle.getInt("SmartGoHomeStatus_TimeNeededToLandFromCurrentHeight");
                     Float flSmartGoHomeStatus_MaxRadiusAircraftCanFlyAndGoHome = bundle.getFloat("SmartGoHomeStatus_MaxRadiusAircraftCanFlyAndGoHome");
-               //     Boolean blSmartGoHomeStatus_IsAircraftShouldGoHome = bundle.getBoolean("SmartGoHomeStatus_IsAircraftShouldGoHome");
+                    flightControllerCurrentState = flSmartGoHomeStatus_MaxRadiusAircraftCanFlyAndGoHome + "\n";
 
+                    circle.setCenter(new LatLng(droneLocationLat, droneLocationLng));
+                    circle.setRadius(flSmartGoHomeStatus_MaxRadiusAircraftCanFlyAndGoHome);
 
-               /*     if (iRemainingBatteryState == DJIAircraftRemainingBatteryState.Normal.value()) {
-                        stRemainingBatteryState = "Normal";
-                    } else if (iRemainingBatteryState == DJIAircraftRemainingBatteryState.Low.value()) {
-                        stRemainingBatteryState = "Low";
-                    } else if (iRemainingBatteryState == DJIAircraftRemainingBatteryState.VeryLow.value()) {
-                        stRemainingBatteryState = "Very Low";
-                    } else if (iRemainingBatteryState == DJIAircraftRemainingBatteryState.Reserved.value()) {
-                        stRemainingBatteryState = "Reserved Battery State";
-                    }
-
-                    flightControllerCurrentState += "Remaining Battery: " + stRemainingBatteryState + "\n";
-
-                    flightControllerCurrentState += "Smart Battery  - Percentage To Go Home: " + intSmartGoHomeStatus_BatteryPercentageToGoHome  + "\n";
-                   */ //flightControllerCurrentState += "Smart Battery  - Remaining Flight Time: " + intSmartGoHomeStatus_RemainingFlightTime  + "\n";
-                   /* flightControllerCurrentState += "Smart Battery  - Time Needed to go Home: " + intSmartGoHomeStatus_TimeNeededToGoHome  + "\n";
-                    flightControllerCurrentState += "Smart Battery  - Tm Needed to land from Cur Hght: " + intSmartGoHomeStatus_TimeNeededToLandFromCurrentHeight  + "\n";*/
-                    flightControllerCurrentState += flSmartGoHomeStatus_MaxRadiusAircraftCanFlyAndGoHome + "\n";
-                  //  flightControllerCurrentState += "Smart Battery  - Is Aircraft should go home: " + blSmartGoHomeStatus_IsAircraftShouldGoHome  + "\n";
-                    break;
+                   break;
                 case MSG_FLIGHT_CONTROLLER_CURRENT_STATE_ERROR:
                     flightControllerCurrentState += bundle.getString("FlightControllerCurrentStateError") + "\n";
+                    Toast.makeText(DemoMaps.this, "Rayon max non trouvé", Toast.LENGTH_SHORT).show();
                     break;
                 case MSG_FLIGHT_CONTROLLER_CURRENT_STATE_NO_CONNECTION:
                     flightControllerCurrentState += bundle.getString("FlightControllerCurrentStateNoConnection") + "\n";
+                    Toast.makeText(DemoMaps.this, "Rayon max non trouvé", Toast.LENGTH_SHORT).show();
                     break;
             }
-           // m_tv_FlightControllerCurrentState.setText(flightControllerCurrentState);
+
             textValeurDistanceMax.setText(flightControllerCurrentState);
+
             return false;
         }
 
@@ -501,7 +495,7 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
                     droneMarker = gMap.addMarker(markerOptions);
                     float zoomlevel = (float) 18.0;
                     gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(droneLocationLat, droneLocationLng), zoomlevel));
-                    //  mMarkers.put(0,droneMarker);
+
                 }
             }
         });
@@ -699,18 +693,21 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
                 }
             });
 
-            for(int i=1;i<mMarkers.size();i++) {
-                LatLng point1 = new LatLng(mMarkers.get(i-1).getPosition().latitude, mMarkers.get(i-1).getPosition().longitude);
-                LatLng point2 = new LatLng(mMarkers.get(i).getPosition().latitude, mMarkers.get(i).getPosition().longitude);
-                gMap.addPolyline(new PolylineOptions()
-                        .add(point1, point2)
-                        .width(5)
-                        .color(Color.RED));
-            }
 
-            textValeurDistance.setText(calculDistance());
-            runFlightControllerCurrentState();
         }
+
+        for(int i=1;i<mMarkers.size();i++) {
+            LatLng point1 = new LatLng(mMarkers.get(i-1).getPosition().latitude, mMarkers.get(i-1).getPosition().longitude);
+            LatLng point2 = new LatLng(mMarkers.get(i).getPosition().latitude, mMarkers.get(i).getPosition().longitude);
+            gMap.addPolyline(new PolylineOptions()
+                    .add(point1, point2)
+                    .width(5)
+                    .color(Color.RED));
+        }
+
+        start.setEnabled(true);
+        textValeurDistance.setText(calculDistance());
+        runFlightControllerCurrentState();
     }
 
     private void startWaypointMission(){
@@ -718,6 +715,7 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
        /* for (Map.Entry<Integer, Marker> entry : mMarkers.entrySet())
             listLatLng.add(entry.getValue().getPosition());*/
 
+       stop.setEnabled(true);
 
         if (mMissionManager != null) {
                 mMissionManager.startMissionExecution(new DJICommonCallbacks.DJICompletionCallback() {
@@ -750,6 +748,12 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
             gMap = googleMap;
             setUpMap();
         }
+
+        circle = gMap.addCircle(new CircleOptions()
+                .center(new LatLng(droneLocationLat,droneLocationLng ))
+                .radius(0)
+                .strokeColor(Color.BLUE)
+                .fillColor(Color.TRANSPARENT));
 
     }
 
