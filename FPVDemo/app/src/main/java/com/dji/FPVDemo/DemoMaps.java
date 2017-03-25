@@ -76,6 +76,7 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
     private Button config, prepare, start, stop, atterrir;
     private TextView textValeurDistance;
     private TextView textValeurDistanceMax;
+    private TextView textGPS;
     private Circle circle;
 
     private boolean isAdd = false;
@@ -99,6 +100,8 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
     final public int MSG_FLIGHT_CONTROLLER_CURRENT_STATE_ERROR = 2;
     final public int MSG_FLIGHT_CONTROLLER_CURRENT_STATE_NO_CONNECTION = 3;
 
+    protected StringBuffer mGpsStringBuffer;
+    protected static final int CHANGE_TEXT_VIEW = 0;
 
 
     @Override
@@ -149,6 +152,7 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
         stop.setEnabled(false);
         textValeurDistance = (TextView) findViewById(R.id.textValeurDistance);
         textValeurDistanceMax = (TextView) findViewById(R.id.textValeurDistanceMax);
+        textGPS = (TextView) findViewById(R.id.textGPS);
 
         // atterrir = (Button) findViewById(R.id.atterir);
 
@@ -194,6 +198,28 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        mGpsStringBuffer = new StringBuffer();
+
+        mFlightController.setUpdateSystemStateCallback(new DJIFlightControllerDelegate.FlightControllerUpdateSystemStateCallback() {
+            @Override
+            public void onResult(DJIFlightControllerCurrentState djiFlightControllerCurrentState) {
+                mGpsStringBuffer.delete(0, mGpsStringBuffer.length());
+
+                mGpsStringBuffer.append("Altitude : ").
+                        append(djiFlightControllerCurrentState.getAircraftLocation().getAltitude()).
+                        append("m. ").
+                        append("Latitude : ").
+                        append(String.format("%.5f",djiFlightControllerCurrentState.getAircraftLocation().getLatitude())).
+                        append("Longitude :").
+                        append(String.format("%.5f",djiFlightControllerCurrentState.getAircraftLocation().getLongitude()));
+
+
+                mHandler.sendEmptyMessage(CHANGE_TEXT_VIEW);
+            }
+
+
+        });
 
     }
 
@@ -260,6 +286,11 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
             String flightControllerCurrentState = "";
             switch (msg.what) {
+
+                case CHANGE_TEXT_VIEW :
+                    textGPS.setText(mGpsStringBuffer.toString());
+                    break;
+
                 case MSG_FLIGHT_CONTROLLER_CURRENT_STATE:
 
 

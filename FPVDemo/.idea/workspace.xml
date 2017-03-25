@@ -50,15 +50,18 @@
       <file leaf-file-name="DemoMaps.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/dji/FPVDemo/DemoMaps.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="376">
-              <caret line="125" column="31" selection-start-line="125" selection-start-column="31" selection-end-line="125" selection-end-column="31" />
+            <state relative-caret-position="171">
+              <caret line="217" column="60" selection-start-line="217" selection-start-column="60" selection-end-line="217" selection-end-column="60" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#7862#9657#0" expanded="true" />
-                <element signature="e#9656#9657#0" expanded="true" />
-                <element signature="e#16197#16614#0" expanded="true" />
-                <element signature="e#16613#16614#0" expanded="true" />
-                <marker date="1490455560351" expanded="false" signature="10456:10551" ph="(Callback) (msg) → {" />
+                <element signature="e#7775#8672#0" expanded="true" />
+                <element signature="e#8671#8672#0" expanded="true" />
+                <element signature="e#9051#10846#0" expanded="true" />
+                <element signature="e#10845#10846#0" expanded="true" />
+                <element signature="e#11645#14078#0" expanded="true" />
+                <element signature="e#14077#14078#0" expanded="true" />
+                <element signature="e#17521#17938#0" expanded="true" />
+                <element signature="e#17937#17938#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -86,19 +89,19 @@
       </file>
       <file leaf-file-name="activity_demo_maps.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_demo_maps.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="572">
-              <caret line="26" column="40" selection-start-line="26" selection-start-column="40" selection-end-line="26" selection-end-column="40" />
+          <provider editor-type-id="text-editor">
+            <state relative-caret-position="385">
+              <caret line="89" column="0" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
               <folding>
                 <element signature="e#646#669#0" expanded="true" />
                 <element signature="e#1651#1675#0" expanded="true" />
                 <element signature="e#2883#2901#0" expanded="true" />
-                <element signature="e#3495#3517#0" expanded="true" />
-                <element signature="e#3732#3755#0" expanded="true" />
+                <element signature="e#3333#3355#0" expanded="true" />
+                <element signature="e#3570#3593#0" expanded="true" />
               </folding>
             </state>
           </provider>
-          <provider editor-type-id="android-designer2">
+          <provider selected="true" editor-type-id="android-designer2">
             <state />
           </provider>
         </entry>
@@ -3098,8 +3101,8 @@
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values-en/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values-fr/strings.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/dji/FPVDemo/DemoMaps.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_demo_maps.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/dji/FPVDemo/DemoMaps.java" />
       </list>
     </option>
   </component>
@@ -3713,11 +3716,14 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#7862#9657#0" expanded="true" />
-            <element signature="e#9656#9657#0" expanded="true" />
-            <element signature="e#16197#16614#0" expanded="true" />
-            <element signature="e#16613#16614#0" expanded="true" />
-            <marker date="1490455560351" expanded="false" signature="10456:10551" ph="(Callback) (msg) → {" />
+            <element signature="e#7775#8672#0" expanded="true" />
+            <element signature="e#8671#8672#0" expanded="true" />
+            <element signature="e#9051#10846#0" expanded="true" />
+            <element signature="e#10845#10846#0" expanded="true" />
+            <element signature="e#11645#14078#0" expanded="true" />
+            <element signature="e#14077#14078#0" expanded="true" />
+            <element signature="e#17521#17938#0" expanded="true" />
+            <element signature="e#17937#17938#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -3736,11 +3742,14 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#7862#9657#0" expanded="true" />
-            <element signature="e#9656#9657#0" expanded="true" />
-            <element signature="e#16197#16614#0" expanded="true" />
-            <element signature="e#16613#16614#0" expanded="true" />
-            <marker date="1490455560351" expanded="false" signature="10456:10551" ph="(Callback) (msg) → {" />
+            <element signature="e#7775#8672#0" expanded="true" />
+            <element signature="e#8671#8672#0" expanded="true" />
+            <element signature="e#9051#10846#0" expanded="true" />
+            <element signature="e#10845#10846#0" expanded="true" />
+            <element signature="e#11645#14078#0" expanded="true" />
+            <element signature="e#14077#14078#0" expanded="true" />
+            <element signature="e#17521#17938#0" expanded="true" />
+            <element signature="e#17937#17938#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -3751,11 +3760,14 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#7862#9657#0" expanded="true" />
-            <element signature="e#9656#9657#0" expanded="true" />
-            <element signature="e#16197#16614#0" expanded="true" />
-            <element signature="e#16613#16614#0" expanded="true" />
-            <marker date="1490455560351" expanded="false" signature="10456:10551" ph="(Callback) (msg) → {" />
+            <element signature="e#7775#8672#0" expanded="true" />
+            <element signature="e#8671#8672#0" expanded="true" />
+            <element signature="e#9051#10846#0" expanded="true" />
+            <element signature="e#10845#10846#0" expanded="true" />
+            <element signature="e#11645#14078#0" expanded="true" />
+            <element signature="e#14077#14078#0" expanded="true" />
+            <element signature="e#17521#17938#0" expanded="true" />
+            <element signature="e#17937#17938#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -3766,11 +3778,14 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#7862#9657#0" expanded="true" />
-            <element signature="e#9656#9657#0" expanded="true" />
-            <element signature="e#16197#16614#0" expanded="true" />
-            <element signature="e#16613#16614#0" expanded="true" />
-            <marker date="1490455560351" expanded="false" signature="10456:10551" ph="(Callback) (msg) → {" />
+            <element signature="e#7775#8672#0" expanded="true" />
+            <element signature="e#8671#8672#0" expanded="true" />
+            <element signature="e#9051#10846#0" expanded="true" />
+            <element signature="e#10845#10846#0" expanded="true" />
+            <element signature="e#11645#14078#0" expanded="true" />
+            <element signature="e#14077#14078#0" expanded="true" />
+            <element signature="e#17521#17938#0" expanded="true" />
+            <element signature="e#17937#17938#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -3792,11 +3807,14 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#7862#9657#0" expanded="true" />
-            <element signature="e#9656#9657#0" expanded="true" />
-            <element signature="e#16197#16614#0" expanded="true" />
-            <element signature="e#16613#16614#0" expanded="true" />
-            <marker date="1490455560351" expanded="false" signature="10456:10551" ph="(Callback) (msg) → {" />
+            <element signature="e#7775#8672#0" expanded="true" />
+            <element signature="e#8671#8672#0" expanded="true" />
+            <element signature="e#9051#10846#0" expanded="true" />
+            <element signature="e#10845#10846#0" expanded="true" />
+            <element signature="e#11645#14078#0" expanded="true" />
+            <element signature="e#14077#14078#0" expanded="true" />
+            <element signature="e#17521#17938#0" expanded="true" />
+            <element signature="e#17937#17938#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -3924,33 +3942,36 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_demo_maps.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="572">
-          <caret line="26" column="40" selection-start-line="26" selection-start-column="40" selection-end-line="26" selection-end-column="40" />
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="385">
+          <caret line="89" column="0" selection-start-line="89" selection-start-column="0" selection-end-line="89" selection-end-column="0" />
           <folding>
             <element signature="e#646#669#0" expanded="true" />
             <element signature="e#1651#1675#0" expanded="true" />
             <element signature="e#2883#2901#0" expanded="true" />
-            <element signature="e#3495#3517#0" expanded="true" />
-            <element signature="e#3732#3755#0" expanded="true" />
+            <element signature="e#3333#3355#0" expanded="true" />
+            <element signature="e#3570#3593#0" expanded="true" />
           </folding>
         </state>
       </provider>
-      <provider editor-type-id="android-designer2">
+      <provider selected="true" editor-type-id="android-designer2">
         <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/dji/FPVDemo/DemoMaps.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="376">
-          <caret line="125" column="31" selection-start-line="125" selection-start-column="31" selection-end-line="125" selection-end-column="31" />
+        <state relative-caret-position="171">
+          <caret line="217" column="60" selection-start-line="217" selection-start-column="60" selection-end-line="217" selection-end-column="60" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#7862#9657#0" expanded="true" />
-            <element signature="e#9656#9657#0" expanded="true" />
-            <element signature="e#16197#16614#0" expanded="true" />
-            <element signature="e#16613#16614#0" expanded="true" />
-            <marker date="1490455560351" expanded="false" signature="10456:10551" ph="(Callback) (msg) → {" />
+            <element signature="e#7775#8672#0" expanded="true" />
+            <element signature="e#8671#8672#0" expanded="true" />
+            <element signature="e#9051#10846#0" expanded="true" />
+            <element signature="e#10845#10846#0" expanded="true" />
+            <element signature="e#11645#14078#0" expanded="true" />
+            <element signature="e#14077#14078#0" expanded="true" />
+            <element signature="e#17521#17938#0" expanded="true" />
+            <element signature="e#17937#17938#0" expanded="true" />
           </folding>
         </state>
       </provider>
