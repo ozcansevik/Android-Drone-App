@@ -37,6 +37,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -100,7 +102,8 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
     final public int MSG_FLIGHT_CONTROLLER_CURRENT_STATE_ERROR = 2;
     final public int MSG_FLIGHT_CONTROLLER_CURRENT_STATE_NO_CONNECTION = 3;
 
-    protected StringBuffer mGpsStringBuffer;
+    private StringBuffer mGpsStringBuffer;
+    private StringBuffer mDistanceMax;
     protected static final int CHANGE_TEXT_VIEW = 0;
 
 
@@ -200,32 +203,14 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
         mapFragment.getMapAsync(this);
 
         mGpsStringBuffer = new StringBuffer();
+        mDistanceMax = new StringBuffer();
 
-        mFlightController.setUpdateSystemStateCallback(new DJIFlightControllerDelegate.FlightControllerUpdateSystemStateCallback() {
-            @Override
-            public void onResult(DJIFlightControllerCurrentState djiFlightControllerCurrentState) {
-                mGpsStringBuffer.delete(0, mGpsStringBuffer.length());
-
-                mGpsStringBuffer.append("Altitude : ").
-                        append(djiFlightControllerCurrentState.getAircraftLocation().getAltitude()).
-                        append("m. ").
-                        append("Latitude : ").
-                        append(String.format("%.5f",djiFlightControllerCurrentState.getAircraftLocation().getLatitude())).
-                        append("Longitude :").
-                        append(String.format("%.5f",djiFlightControllerCurrentState.getAircraftLocation().getLongitude()));
-
-
-                mHandler.sendEmptyMessage(CHANGE_TEXT_VIEW);
-            }
-
-
-        });
 
     }
 
 
 
-    private void runFlightControllerCurrentState() {
+  /*  private void runFlightControllerCurrentState() {
         try {
             DJIAircraft djiAircraft = (DJIAircraft) DJISDKManager.getInstance().getDJIProduct();
             if (djiAircraft != null) {
@@ -242,22 +227,19 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
 
                                 DJIFlightControllerSmartGoHomeStatus smartGoHomeStatus = djiFlightControllerCurrentState.getSmartGoHomeStatus();
 
-                                Message msg = Message.obtain();
-                                Bundle bundle = new Bundle();
+                               // Message msg = Message.obtain();
+                              //  Bundle bundle = new Bundle();
 
-
+                                mDistanceMax.delete(0, mDistanceMax.length());
+                                mDistanceMax.append(smartGoHomeStatus.getMaxRadiusAircraftCanFlyAndGoHome());
+                                mHandler.sendEmptyMessage(MSG_FLIGHT_CONTROLLER_CURRENT_STATE);
                                 // Complete the more complex returned values from flight controller.
 
-                               // bundle.putInt("SmartGoHomeStatus_BatteryPercentageToGoHome", smartGoHomeStatus.getBatteryPercentageNeededToGoHome());
-                             // bundle.putInt("SmartGoHomeStatus_RemainingFlightTime", smartGoHomeStatus.getRemainingFlightTime());
-                            //    bundle.putInt("SmartGoHomeStatus_TimeNeededToGoHome", smartGoHomeStatus.getTimeNeededToGoHome());
-                            //    bundle.putInt("SmartGoHomeStatus_TimeNeededToLandFromCurrentHeight", smartGoHomeStatus.getTimeNeededToLandFromCurrentHeight());
-                                bundle.putFloat("SmartGoHomeStatus_MaxRadiusAircraftCanFlyAndGoHome", smartGoHomeStatus.getMaxRadiusAircraftCanFlyAndGoHome());
-                             //   bundle.putBoolean("SmartGoHomeStatus_IsAircraftShouldGoHome", smartGoHomeStatus.isAircraftShouldGoHome());
+                              // bundle.putFloat("SmartGoHomeStatus_MaxRadiusAircraftCanFlyAndGoHome", smartGoHomeStatus.getMaxRadiusAircraftCanFlyAndGoHome());
 
-                                msg.what = MSG_FLIGHT_CONTROLLER_CURRENT_STATE;
-                                msg.setData(bundle);
-                                mHandler.sendMessage(msg);
+                             //   msg.what = MSG_FLIGHT_CONTROLLER_CURRENT_STATE;
+                             //   msg.setData(bundle);
+                             //   mHandler.sendMessage(msg);
                             }
                         });
 
@@ -277,14 +259,14 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
         }
     }
 
-
+*/
     private Handler mHandler = new Handler(new Handler.Callback() {
 
         @Override
         public boolean handleMessage(Message msg) {
-            Bundle bundle = msg.getData();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            String flightControllerCurrentState = "";
+           // Bundle bundle = msg.getData();
+           // SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+         //   String flightControllerCurrentState = "";
             switch (msg.what) {
 
                 case CHANGE_TEXT_VIEW :
@@ -294,31 +276,24 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
                 case MSG_FLIGHT_CONTROLLER_CURRENT_STATE:
 
 
-                  //  Integer iRemainingBatteryState = bundle.getInt("RemainingBatteryState");
-                //    String stRemainingBatteryState = "";
-
-               //     Integer intSmartGoHomeStatus_BatteryPercentageToGoHome = bundle.getInt("SmartGoHomeStatus_BatteryPercentageToGoHome");
-                //  Integer intSmartGoHomeStatus_RemainingFlightTime = bundle.getInt("SmartGoHomeStatus_RemainingFlightTime");
-               //     Integer intSmartGoHomeStatus_TimeNeededToGoHome = bundle.getInt("SmartGoHomeStatus_TimeNeededToGoHome");
-             //       Integer intSmartGoHomeStatus_TimeNeededToLandFromCurrentHeight = bundle.getInt("SmartGoHomeStatus_TimeNeededToLandFromCurrentHeight");
-                    Float flSmartGoHomeStatus_MaxRadiusAircraftCanFlyAndGoHome = bundle.getFloat("SmartGoHomeStatus_MaxRadiusAircraftCanFlyAndGoHome");
-                    flightControllerCurrentState = flSmartGoHomeStatus_MaxRadiusAircraftCanFlyAndGoHome + "\n";
+                    //Float flSmartGoHomeStatus_MaxRadiusAircraftCanFlyAndGoHome = bundle.getFloat("SmartGoHomeStatus_MaxRadiusAircraftCanFlyAndGoHome");
 
                     circle.setCenter(new LatLng(droneLocationLat, droneLocationLng));
-                    circle.setRadius(flSmartGoHomeStatus_MaxRadiusAircraftCanFlyAndGoHome);
+                    circle.setRadius(Double.valueOf(mDistanceMax.toString()));
 
                    break;
-                case MSG_FLIGHT_CONTROLLER_CURRENT_STATE_ERROR:
+
+               /* case MSG_FLIGHT_CONTROLLER_CURRENT_STATE_ERROR:
                     flightControllerCurrentState += bundle.getString("FlightControllerCurrentStateError") + "\n";
                     Toast.makeText(DemoMaps.this, "Rayon max non trouvé", Toast.LENGTH_SHORT).show();
                     break;
                 case MSG_FLIGHT_CONTROLLER_CURRENT_STATE_NO_CONNECTION:
                     flightControllerCurrentState += bundle.getString("FlightControllerCurrentStateNoConnection") + "\n";
                     Toast.makeText(DemoMaps.this, "Rayon max non trouvé", Toast.LENGTH_SHORT).show();
-                    break;
+                    break;*/
             }
 
-            textValeurDistanceMax.setText(flightControllerCurrentState);
+            textValeurDistanceMax.setText(mDistanceMax.toString());
 
             return false;
         }
@@ -372,9 +347,29 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
                     droneLocationLng = state.getAircraftLocation().getLongitude();
                     updateDroneLocation();
 
+                    mGpsStringBuffer.delete(0, mGpsStringBuffer.length());
+
+                    mGpsStringBuffer.append("Altitude : ").
+                            append(state.getAircraftLocation().getAltitude()).
+                            append("m. ").
+                            append("Latitude : ").
+                            append(String.format("%.5f",state.getAircraftLocation().getLatitude())).
+                            append("Longitude :").
+                            append(String.format("%.5f",state.getAircraftLocation().getLongitude()));
+
+
+                    mHandler.sendEmptyMessage(CHANGE_TEXT_VIEW);
+
+                    DJIFlightControllerSmartGoHomeStatus smartGoHomeStatus = state.getSmartGoHomeStatus();
+
+                    mDistanceMax.delete(0, mDistanceMax.length());
+                    mDistanceMax.append(smartGoHomeStatus.getMaxRadiusAircraftCanFlyAndGoHome());
+                    mHandler.sendEmptyMessage(MSG_FLIGHT_CONTROLLER_CURRENT_STATE);
+
                 }
             });
         }
+
     }
 
     private void rotation(){
@@ -738,7 +733,7 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
 
         start.setEnabled(true);
         textValeurDistance.setText(calculDistance());
-        runFlightControllerCurrentState();
+        //runFlightControllerCurrentState();
     }
 
     private void startWaypointMission(){
@@ -770,6 +765,13 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
             if (mWaypointMission != null){
                 mWaypointMission.removeAllWaypoints();
             }
+            
+            mFlightController.goHome(new DJICompletionCallback() {
+                @Override
+                public void onResult(DJIError djiError) {
+                    Toast.makeText(DemoMaps.this, "GO HOME", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 
