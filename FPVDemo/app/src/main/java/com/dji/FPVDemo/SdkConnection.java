@@ -139,22 +139,7 @@ public class SdkConnection extends Application{
         }
     };
 
-    //TAKING PHOTO
-    public static synchronized DJICamera getCameraInstance() {
 
-        if (getProductInstance() == null) return null;
-
-        DJICamera camera = null;
-
-        if (getProductInstance() instanceof DJIAircraft){
-            camera = ((DJIAircraft) getProductInstance()).getCamera();
-
-        } else if (getProductInstance() instanceof DJIHandHeld) {
-            camera = ((DJIHandHeld) getProductInstance()).getCamera();
-        }
-
-        return camera;
-    }
 
 
 }

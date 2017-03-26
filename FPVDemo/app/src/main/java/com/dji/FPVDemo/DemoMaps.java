@@ -78,10 +78,9 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
 
     private GoogleMap gMap;
 
-    private Button locate, add, clear;
-    private Button config, prepare, start, stop, atterrir;
+
+    private Button config, prepare, start, stop;
     private TextView textValeurDistance;
-    private TextView textValeurDistanceMax;
     private TextView textGPS;
     private Circle circle;
 
@@ -106,7 +105,7 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
 
     private StringBuffer mGpsStringBuffer;
     private StringBuffer mDistanceMax;
-    protected static final int CHANGE_TEXT_VIEW = 0;
+    private static final int CHANGE_TEXT_VIEW = 0;
 
 
     @Override
@@ -666,13 +665,5 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
 
     }
 
-
-    public void showToast(final String msg) {
-        runOnUiThread(new Runnable() {
-            public void run() {
-                Toast.makeText(DemoMaps.this, msg, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
 }
