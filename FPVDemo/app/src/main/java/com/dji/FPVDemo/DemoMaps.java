@@ -47,18 +47,22 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
+import dji.common.battery.DJIBatteryState;
 import dji.common.camera.DJICameraSettingsDef;
 import dji.common.error.DJIError;
 import dji.common.flightcontroller.DJIAircraftRemainingBatteryState;
 import dji.common.flightcontroller.DJIFlightControllerCurrentState;
 import dji.common.flightcontroller.DJIFlightControllerDataType;
 import dji.common.flightcontroller.DJIFlightControllerSmartGoHomeStatus;
+import dji.common.flightcontroller.DJIGoHomeStatus;
 import dji.common.flightcontroller.DJISimulatorInitializationData;
 import dji.common.util.DJICommonCallbacks;
 import dji.sdk.base.DJIBaseProduct;
+import dji.sdk.battery.DJIBattery;
 import dji.sdk.camera.DJICamera;
 import dji.sdk.flightcontroller.DJIFlightController;
 import dji.sdk.flightcontroller.DJIFlightControllerDelegate;
+import dji.sdk.flightcontroller.DJIFlightLimitation;
 import dji.sdk.flightcontroller.DJISimulator;
 import dji.sdk.missionmanager.DJIMission;
 import dji.sdk.missionmanager.DJIMissionManager;
@@ -81,15 +85,16 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
     private TextView textGPS;
     private Circle circle;
 
-    private boolean isAdd = false;
 
     private double droneLocationLat = 181, droneLocationLng = 181;
     private final Map<Integer, Marker> mMarkers = new ConcurrentHashMap<Integer, Marker>();
     private Marker droneMarker = null;
-    private List<LatLng> listLatLng = new ArrayList<>();
 
     private float altitude = 20.0f;
     private float mSpeed = 5.0f;
+    private int rotation;
+
+    private int batteryLevel;
 
     private DJIWaypointMission mWaypointMission;
     private DJIMissionManager mMissionManager;
@@ -98,9 +103,6 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
     private DJIWaypointMission.DJIWaypointMissionFinishedAction mFinishedAction = DJIWaypointMission.DJIWaypointMissionFinishedAction.GoHome;;
     private DJIWaypointMission.DJIWaypointMissionHeadingMode mHeadingMode = DJIWaypointMission.DJIWaypointMissionHeadingMode.Auto ;
 
-    final public int MSG_FLIGHT_CONTROLLER_CURRENT_STATE = 1;
-    final public int MSG_FLIGHT_CONTROLLER_CURRENT_STATE_ERROR = 2;
-    final public int MSG_FLIGHT_CONTROLLER_CURRENT_STATE_NO_CONNECTION = 3;
 
     private StringBuffer mGpsStringBuffer;
     private StringBuffer mDistanceMax;
@@ -154,14 +156,9 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
         stop = (Button) findViewById(R.id.stop);
         stop.setEnabled(false);
         textValeurDistance = (TextView) findViewById(R.id.textValeurDistance);
-        textValeurDistanceMax = (TextView) findViewById(R.id.textValeurDistanceMax);
         textGPS = (TextView) findViewById(R.id.textGPS);
 
-        // atterrir = (Button) findViewById(R.id.atterir);
 
-        //   locate.setOnClickListener(this);
-        // add.setOnClickListener(this);
-        //  clear.setOnClickListener(this);
         config.setOnClickListener(this);
         prepare.setOnClickListener(this);
         start.setOnClickListener(this);
@@ -210,90 +207,21 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
 
 
 
-  /*  private void runFlightControllerCurrentState() {
-        try {
-            DJIAircraft djiAircraft = (DJIAircraft) DJISDKManager.getInstance().getDJIProduct();
-            if (djiAircraft != null) {
 
-                DJIFlightController flightController = mFlightController;
-
-                flightController.setUpdateSystemStateCallback(
-                        new DJIFlightControllerDelegate.FlightControllerUpdateSystemStateCallback() {
-
-                            @Override
-                            public void onResult(DJIFlightControllerCurrentState
-                                                         djiFlightControllerCurrentState) {
-
-
-                                DJIFlightControllerSmartGoHomeStatus smartGoHomeStatus = djiFlightControllerCurrentState.getSmartGoHomeStatus();
-
-                               // Message msg = Message.obtain();
-                              //  Bundle bundle = new Bundle();
-
-                                mDistanceMax.delete(0, mDistanceMax.length());
-                                mDistanceMax.append(smartGoHomeStatus.getMaxRadiusAircraftCanFlyAndGoHome());
-                                mHandler.sendEmptyMessage(MSG_FLIGHT_CONTROLLER_CURRENT_STATE);
-                                // Complete the more complex returned values from flight controller.
-
-                              // bundle.putFloat("SmartGoHomeStatus_MaxRadiusAircraftCanFlyAndGoHome", smartGoHomeStatus.getMaxRadiusAircraftCanFlyAndGoHome());
-
-                             //   msg.what = MSG_FLIGHT_CONTROLLER_CURRENT_STATE;
-                             //   msg.setData(bundle);
-                             //   mHandler.sendMessage(msg);
-                            }
-                        });
-
-            } else {
-                Message msg = Message.obtain();
-                Bundle bundle = new Bundle();
-                bundle.putString("FlightControllerCurrentStateNoConnection", "Flight Controller Current State - no connection available: ");
-                msg.what = MSG_FLIGHT_CONTROLLER_CURRENT_STATE_NO_CONNECTION;
-                mHandler.sendMessage(msg);
-            }
-        } catch (Exception e) {
-            Message msg = new Message();
-            Bundle bundle = new Bundle();
-            bundle.putString("FlightControllerCurrentState", "Flight Controller Current State Error: " + e.getMessage() );
-            msg.what = MSG_FLIGHT_CONTROLLER_CURRENT_STATE_ERROR;
-            mHandler.sendMessage(msg);
-        }
-    }
-
-*/
     private Handler mHandler = new Handler(new Handler.Callback() {
 
         @Override
         public boolean handleMessage(Message msg) {
-           // Bundle bundle = msg.getData();
-           // SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-         //   String flightControllerCurrentState = "";
+
             switch (msg.what) {
 
                 case CHANGE_TEXT_VIEW :
                     textGPS.setText(mGpsStringBuffer.toString());
+                    //modif du cercle en recupérent mDistanceMax si on avait pas eu de problèmes
+                    // avec la methode getMaxRadiusAircraftCanFlyAndGoHome()
                     break;
 
-                case MSG_FLIGHT_CONTROLLER_CURRENT_STATE:
-
-
-                    //Float flSmartGoHomeStatus_MaxRadiusAircraftCanFlyAndGoHome = bundle.getFloat("SmartGoHomeStatus_MaxRadiusAircraftCanFlyAndGoHome");
-
-                    circle.setCenter(new LatLng(droneLocationLat, droneLocationLng));
-                    circle.setRadius(Double.valueOf(mDistanceMax.toString()));
-
-                   break;
-
-               /* case MSG_FLIGHT_CONTROLLER_CURRENT_STATE_ERROR:
-                    flightControllerCurrentState += bundle.getString("FlightControllerCurrentStateError") + "\n";
-                    Toast.makeText(DemoMaps.this, "Rayon max non trouvé", Toast.LENGTH_SHORT).show();
-                    break;
-                case MSG_FLIGHT_CONTROLLER_CURRENT_STATE_NO_CONNECTION:
-                    flightControllerCurrentState += bundle.getString("FlightControllerCurrentStateNoConnection") + "\n";
-                    Toast.makeText(DemoMaps.this, "Rayon max non trouvé", Toast.LENGTH_SHORT).show();
-                    break;*/
             }
-
-            textValeurDistanceMax.setText(mDistanceMax.toString());
 
             return false;
         }
@@ -307,6 +235,7 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
         @Override
         public void onReceive(Context context, Intent intent) {
             onProductConnectionChange();
+
         }
     };
 
@@ -332,6 +261,8 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
 
     }
 
+
+
     private void initFlightController() {
         DJIBaseProduct product = SdkConnection.getProductInstance();
         if (product != null && product.isConnected()) {
@@ -340,6 +271,8 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
             }
         }
         if (mFlightController != null) {
+
+
             mFlightController.setUpdateSystemStateCallback(new DJIFlightControllerDelegate.FlightControllerUpdateSystemStateCallback() {
                 @Override
                 public void onResult(DJIFlightControllerCurrentState state) {
@@ -358,53 +291,37 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
                             append(String.format("%.5f",state.getAircraftLocation().getLongitude()));
 
 
+                    rotation = state.getAircraftHeadDirection();
+
+                    /*PARTIE AVEC SMART GO HOME STATUS RETOURNANT SYSTEMATIQUEMENT : 0
+
+                    DJIFlightControllerSmartGoHomeStatus djiFlightControllerSmartGoHomeStatus = state.getSmartGoHomeStatus();
+                    mDistanceMax.delete(0, mGpsStringBuffer.length());
+                    mDistanceMax.append(Float.toString(djiFlightControllerSmartGoHomeStatus.getMaxRadiusAircraftCanFlyAndGoHome()));
+                    */
+
                     mHandler.sendEmptyMessage(CHANGE_TEXT_VIEW);
-
-                    DJIFlightControllerSmartGoHomeStatus smartGoHomeStatus = state.getSmartGoHomeStatus();
-
-                    mDistanceMax.delete(0, mDistanceMax.length());
-                    mDistanceMax.append(smartGoHomeStatus.getMaxRadiusAircraftCanFlyAndGoHome());
-                    mHandler.sendEmptyMessage(MSG_FLIGHT_CONTROLLER_CURRENT_STATE);
 
                 }
             });
+
+            try {
+                SdkConnection.getProductInstance().getBattery().setBatteryStateUpdateCallback(
+                        new DJIBattery.DJIBatteryStateUpdateCallback() {
+                            @Override
+                            public void onResult(DJIBatteryState djiBatteryState) {
+
+                                batteryLevel = djiBatteryState.getBatteryEnergyRemainingPercent();
+
+                            }
+                        }
+                );
+            }  catch (Exception exception) {
+
+                }
+
         }
 
-    }
-
-    private void rotation(){
-
-        float toRotation=0;
-        LatLng currentPos = new LatLng(droneLocationLat,droneLocationLng);
-        int i=0;
-        if(currentPos != listLatLng.get(i)) {
-            toRotation = (float) bearingBetweenLocations(currentPos, listLatLng.get(i));
-            droneMarker.setRotation(toRotation);
-        }
-        else
-            listLatLng.remove(i);
-    }
-
-    private double bearingBetweenLocations(LatLng latLng1,LatLng latLng2) {
-
-        double PI = 3.14159;
-        double lat1 = latLng1.latitude * PI / 180;
-        double long1 = latLng1.longitude * PI / 180;
-        double lat2 = latLng2.latitude * PI / 180;
-        double long2 = latLng2.longitude * PI / 180;
-
-        double dLon = (long2 - long1);
-
-        double y = Math.sin(dLon) * Math.cos(lat2);
-        double x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1)
-                * Math.cos(lat2) * Math.cos(dLon);
-
-        double brng = Math.atan2(y, x);
-
-        brng = Math.toDegrees(brng);
-        brng = (brng + 360) % 360;
-
-        return brng;
     }
 
 
@@ -444,17 +361,6 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
 
     @Override
     public void onMapClick(LatLng point) {
-        /*if (isAdd){
-            markWaypoint(point);
-            DJIWaypoint mWaypoint = new DJIWaypoint(point.latitude, point.longitude, altitude);
-            //Add waypoints to Waypoint arraylist;
-            if (mWaypointMission != null) {
-                mWaypointMission.addWaypoint(mWaypoint);
-                setResultToToast("AddWaypoint");
-            }
-        }else{
-            setResultToToast("Cannot add waypoint");
-        } */
 
         DJIWaypoint.DJIWaypointAction action = new DJIWaypoint.DJIWaypointAction(DJIWaypoint.DJIWaypointActionType.StartTakePhoto,1);
         markWaypoint(point);
@@ -463,13 +369,12 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
         //Add waypoints to Waypoint arraylist;
         if (mWaypointMission != null) {
             mWaypointMission.addWaypoint(mWaypoint);
-           // setResultToToast("AddWaypoint");
         }
 
 
     }
 
-    public String calculDistance(){
+    private String calculDistance(){
 
         String dist = "";
         float distance=0;
@@ -507,6 +412,7 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
     private void updateDroneLocation(){
 
         LatLng pos = new LatLng(droneLocationLat, droneLocationLng);
+
         //Create MarkerOptions object
         final MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(pos);
@@ -521,7 +427,7 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
                     droneMarker = gMap.addMarker(markerOptions);
                     float zoomlevel = (float) 18.0;
                     gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(droneLocationLat, droneLocationLng), zoomlevel));
-
+                    droneMarker.setRotation(rotation);
                 }
             }
         });
@@ -546,27 +452,7 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-       /*     case R.id.locate:{
-                updateDroneLocation();
-                cameraUpdate(); // Locate the drone's place
-                break;
-            } */
-        /*    case R.id.add:{
-                enableDisableAdd();
-                break;
-            }
-            case R.id.clear:{
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        gMap.clear();
-                    }
-                });
-                if (mWaypointMission != null){
-                    mWaypointMission.removeAllWaypoints(); // Remove all the waypoints added to the task
-                }
-                break;
-            }*/
+
             case R.id.config:{
                 showSettingDialog();
                 break;
@@ -585,16 +471,6 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
                 stopWaypointMission();
                 break;
             }
-           /* case R.id.atterir: { //atterrissage forcé
-                stopWaypointMission();
-                mFlightController.autoLanding(new DJICompletionCallback() {
-                    @Override
-                    public void onResult(DJIError djiError) {
-                        //pas de gestion d'erreur pour l'instant : peut etre faire un showDialog : Utils.showDialogBasedOnError(getContext(), djiError);
-                    }
-                });
-                break;
-            }*/
             default:
                 break;
 
@@ -636,21 +512,6 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
                 }
             }
         });
-        /*heading_RG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                Log.d(TAG, "Select heading");
-                if (checkedId == R.id.headingNext) {
-                    mHeadingMode = DJIWaypointMission.DJIWaypointMissionHeadingMode.Auto;
-                } else if (checkedId == R.id.headingInitDirec) {
-                    mHeadingMode = DJIWaypointMission.DJIWaypointMissionHeadingMode.UsingInitialDirection;
-                } else if (checkedId == R.id.headingRC) {
-                    mHeadingMode = DJIWaypointMission.DJIWaypointMissionHeadingMode.ControlByRemoteController;
-                } else if (checkedId == R.id.headingWP) {
-                    mHeadingMode = DJIWaypointMission.DJIWaypointMissionHeadingMode.UsingWaypointHeading;
-                }
-            }
-        });*/
         new AlertDialog.Builder(this)
                 .setTitle("")
                 .setView(wayPointSettings)
@@ -706,6 +567,20 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
         if (mMissionManager != null && mWaypointMission != null) {
             configWayPointMission();
 
+            calculMaxRadius();
+
+            for(int i=1;i<mMarkers.size();i++) {
+                LatLng point1 = new LatLng(mMarkers.get(i-1).getPosition().latitude, mMarkers.get(i-1).getPosition().longitude);
+                LatLng point2 = new LatLng(mMarkers.get(i).getPosition().latitude, mMarkers.get(i).getPosition().longitude);
+                gMap.addPolyline(new PolylineOptions()
+                        .add(point1, point2)
+                        .width(5)
+                        .color(Color.RED));
+            }
+
+            start.setEnabled(true);
+            textValeurDistance.setText(calculDistance());
+
             DJIMission.DJIMissionProgressHandler progressHandler = new DJIMission.DJIMissionProgressHandler() {
                 @Override
                 public void onProgress(DJIMission.DJIProgressType type, float progress) {
@@ -722,24 +597,25 @@ public class DemoMaps extends FragmentActivity implements View.OnClickListener, 
 
         }
 
-        for(int i=1;i<mMarkers.size();i++) {
-            LatLng point1 = new LatLng(mMarkers.get(i-1).getPosition().latitude, mMarkers.get(i-1).getPosition().longitude);
-            LatLng point2 = new LatLng(mMarkers.get(i).getPosition().latitude, mMarkers.get(i).getPosition().longitude);
-            gMap.addPolyline(new PolylineOptions()
-                    .add(point1, point2)
-                    .width(5)
-                    .color(Color.RED));
-        }
+    }
 
-        start.setEnabled(true);
-        textValeurDistance.setText(calculDistance());
-        //runFlightControllerCurrentState();
+    private void calculMaxRadius(){
+        int maxRadius =0;
+
+        if (batteryLevel < 30)
+            maxRadius = 50;
+        else if (batteryLevel < 50)
+            maxRadius = 150;
+        else if (batteryLevel < 70)
+            maxRadius = 250;
+        else if (batteryLevel <= 100)
+            maxRadius = 400;
+
+        circle.setCenter(new LatLng(droneLocationLat, droneLocationLng));
+        circle.setRadius(Double.valueOf(maxRadius));
     }
 
     private void startWaypointMission(){
-
-       /* for (Map.Entry<Integer, Marker> entry : mMarkers.entrySet())
-            listLatLng.add(entry.getValue().getPosition());*/
 
        stop.setEnabled(true);
 

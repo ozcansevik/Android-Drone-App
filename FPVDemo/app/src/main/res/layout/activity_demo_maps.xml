@@ -9,6 +9,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:orientation="horizontal">
 
         <Button
@@ -16,8 +17,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:text="@string/button_config"/>
+            android:text="@string/button_config" />
 
+        <Button
+            android:id="@+id/prepare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:text="@string/button_prepare" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/textDistance"
@@ -36,35 +52,6 @@
             android:layout_gravity="center"/>
 
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/prepare"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_weight="1"
-            android:text="@string/button_prepare" />
-
-        <TextView
-            android:id="@+id/textDistanceMax"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="10dp"
-            android:text="Distance max:" />
-
-        <TextView
-            android:id="@+id/textValeurDistanceMax"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
 
     </LinearLayout>
 
