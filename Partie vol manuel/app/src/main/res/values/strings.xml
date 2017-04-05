@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Phantom Pilot</string>
+    <string name="disconnected">Déconnecté</string>
+    <string name="product_information">Informations produit</string>
+    <string name="connection_loose">Status: Aucun produit connecté</string>
+    <string name="sdk_version">Version SDK: 3.5.1</string>
+
+</resources>

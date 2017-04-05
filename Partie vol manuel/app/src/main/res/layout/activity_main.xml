@@ -1,0 +1,233 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextureView
+        android:id="@+id/video_previewer_surface"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        />
+
+    <TextView
+        android:id="@+id/timer"
+        android:layout_width="150dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="23dp"
+        android:gravity="center"
+        android:textColor="#ffffff"
+        android:layout_alignTop="@+id/video_previewer_surface"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:orientation="horizontal"
+     android:id="@+id/linearLayout"
+     android:layout_alignParentTop="true"
+     android:layout_alignParentStart="true"><![CDATA[-->
+
+
+
+
+        ]]>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/gps"
+            android:text="Pos.: ..."/>
+
+        <!--
+      <Button
+       android:id="@+id/btn_shoot_photo_mode"
+       android:layout_width="0dp"
+       android:layout_weight="1"
+       android:layout_height="wrap_content"
+       android:layout_gravity="center_vertical"
+       android:text="Photo Mode"
+       android:textSize="12sp"/>
+
+        <Button
+       android:id="@+id/btn_record_video_mode"
+       android:layout_width="0dp"
+       android:layout_height="wrap_content"
+       android:text="Video Mode"
+       android:layout_weight="1"
+       android:layout_gravity="center_vertical" />
+
+    -->
+
+    </LinearLayout>
+
+    <com.dji.FPVDemo.OnScreenJoystick
+        android:id="@+id/directionJoystickLeft"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="25dp"
+        android:background="@mipmap/joystick_bg"/>
+
+    <com.dji.FPVDemo.OnScreenJoystick
+        android:id="@+id/directionJoystickRight"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="25dp"
+        android:background="@mipmap/joystick_bg"/>
+
+    <Button
+        android:text="Atterrir"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_decoller"
+        android:layout_alignStart="@+id/btn_decoller"
+        android:id="@+id/btn_atterrir" />
+
+    <Button
+        android:text="Décoller"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_decoller"
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/directionJoystickRight" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/battery_level"
+        android:text="battery:...%"
+        android:layout_alignBaseline="@+id/timer"
+        android:layout_alignBottom="@+id/timer"
+        android:layout_alignParentStart="true" />
+
+    <ToggleButton
+   android:id="@+id/btn_record"
+   android:layout_width="wrap_content"
+   android:layout_height="wrap_content"
+   android:text="Video"
+   android:textOff="Start Record"
+   android:textOn="Stop Record"
+   android:layout_weight="1"
+   android:layout_gravity="center_vertical"
+   android:textSize="12dp"
+   android:checked="false"
+        android:layout_marginStart="19dp"
+        android:layout_alignBaseline="@+id/btn_capture"
+        android:layout_alignBottom="@+id/btn_capture"
+        android:layout_toEndOf="@+id/directionJoystickLeft" />
+
+    <Button
+        android:text="Mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/switchControlBtn"
+        android:layout_below="@+id/btn_atterrir"
+        android:layout_alignEnd="@+id/directionJoystickRight" />
+
+    <Button
+        android:text="Home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/btn_atterrir"
+        android:id="@+id/btn_home" />
+
+    <Button
+        android:text="Bas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_left_down"
+        android:layout_alignBaseline="@+id/btn_record"
+        android:layout_alignBottom="@+id/btn_record"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:text="Rot.G"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_left_left"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/button_left_down" />
+
+    <Button
+        android:text="Rot.D"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_left_right"
+        android:layout_above="@+id/btn_record"
+        android:layout_toEndOf="@+id/button_left_down" />
+
+    <Button
+        android:text="Haut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_left_up"
+        android:layout_alignBaseline="@+id/button_left_right"
+        android:layout_alignBottom="@+id/button_left_right"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:text="Avant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_right_up"
+        android:layout_alignBaseline="@+id/button_right_right"
+        android:layout_alignBottom="@+id/button_right_right"
+        android:layout_alignEnd="@+id/directionJoystickRight" />
+
+    <Button
+        android:text="Droite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_right_right"
+
+        android:layout_above="@+id/btn_capture"
+        android:layout_toStartOf="@+id/button_right_up" />
+
+    <Button
+        android:text="Arriere"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_right_down"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/button_right_right" />
+
+    <Button
+   android:id="@+id/btn_capture"
+   android:layout_width="wrap_content"
+   android:layout_weight="1"
+   android:layout_gravity="center_vertical"
+   android:layout_height="wrap_content"
+   android:text="Photo"
+   android:textSize="12sp"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/button_right_right" />
+
+    <Button
+        android:text="Gauche"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_right_left"
+        android:layout_alignBaseline="@+id/btn_capture"
+        android:layout_alignBottom="@+id/btn_capture"
+        android:layout_alignStart="@+id/button_right_right" />
+
+    <Button
+        android:text="Arret"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_arret"
+        android:layout_above="@+id/button_right_left"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

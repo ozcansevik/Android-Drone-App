@@ -1,0 +1,9 @@
+<resources>
+    <string name="title_activity_demo">Planned flight</string>
+    <string name="app_name">DJI GSDemo</string>
+    <string name="button_prepare">Prepare</string>
+    <string name="button_config">Config</string>
+    <string name="button_start">Start</string>
+    <string name="button_goHome">Go Home</string>
+    <string name="text_gps">Current GPS position</string>
+</resources>

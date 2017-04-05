@@ -1,0 +1,10 @@
+<resources>
+    <string name="title_activity_demo">Vol programmé</string>
+    <string name="app_name">DJI GSDemo</string>
+    <string name="button_prepare">Préparer</string>
+    <string name="button_config">Configurer</string>
+    <string name="button_start">Démarrer</string>
+    <string name="button_goHome">Revenir</string>
+    <string name="text_gps">Position GPS actuelle</string>
+
+</resources>
